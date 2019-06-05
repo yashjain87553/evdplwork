@@ -1,0 +1,43 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$product = $objectManager->get('Magento\Framework\Registry')->registry('current_product'); //get current product
+//$product->getId();
+$blog_ids = $product->getProductBlog();
+if ($blog_ids != "") {
+    $posts = json_decode(file_get_contents('https://luckylips.in/blog/wp-json/wp/v2/posts?include=' . $blog_ids));
+    if (!empty($posts)) {
+        foreach ($posts as $post) {
+            $media_id = $post->featured_media;
+            if ($media_id) {
+                $media = json_decode(file_get_contents('https://luckylips.in/blog/wp-json/wp/v2/media/' . $media_id));
+                $image_url = $media->media_details->sizes->medium->source_url;
+            }
+
+            $post_title = $post->title->rendered;
+            $post_excerpt = $post->excerpt->rendered;
+            $post_content = $post->content->rendered;
+            ?>
+            <div class="product-blog-main">
+                <div class="post-left">
+                    <div class="post-image">
+                        <img src="<?php echo $image_url; ?>" alt="<?php echo $post_title; ?>" />
+                    </div>
+                </div>
+                <div class="post-right">
+                    <div class="post-title">
+                        <h4><?php echo $post_title ?></h4>
+                    </div>
+                    <div class="post-content">
+                        <?php echo $post_excerpt; ?>
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+    }
+} else {
+    ?>
+    <h3><?php echo __('Sorry, no related blog posts are available for this product.'); ?></h3>
+    <?php
+}
+?>

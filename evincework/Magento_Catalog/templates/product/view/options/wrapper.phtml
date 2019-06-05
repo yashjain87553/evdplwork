@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+$required = '';
+if ($block->hasRequiredOptions()) {
+    $required = ' data-hasrequired="' . __('* Required Fields') . '"';
+}
+?>
+<div class="product-options-wrapper" id="product-options-wrapper"<?php /* @escapeNotVerified */ echo $required; ?>>
+    <div class="fieldset" tabindex="0">
+        <?php echo $block->getChildHtml('', true); ?>
+    </div>
+</div>
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+
+        $('body').on('click', '.swatch-option', function (e) {
+            //alert("hello");
+            var bgcolor = $('.swatch-option.selected').attr('option-tooltip-value');
+            //alert(bgcolor);
+            if (bgcolor != 'undefined')
+            {
+                $('.swatch-attribute.color .swatch-attribute-selected-option').html('<div style="background-color:' + bgcolor + ';" class="selected-product-color"></div>');
+            }
+        });
+
+
+        $('body').on('click', '#moreitems_color', function (e) {
+
+            if ($(".swatch-attribute.color").hasClass('more-color-items'))
+            {
+                $('.swatch-attribute.color').removeClass('more-color-items');
+                $('#moreitems_color').html('More');
+            } else
+            {
+                $('.swatch-attribute.color').addClass('more-color-items');
+                $('#moreitems_color').html('Less');
+            }
+        });
+    });
+</script>

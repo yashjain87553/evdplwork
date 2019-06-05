@@ -1,0 +1,90 @@
+ <div class="category_tab_content">
+ <div class="tab">
+
+  <button class="tablinks" onclick="openCity(event, 'Newarrivals')" id="defaultOpen">New Arrivals</button>
+
+  <button class="tablinks" onclick="openCity(event, 'Bestsellers')">Best Sellers</button>
+
+  <button class="tablinks" onclick="openCity(event, 'Toprated')">Top Rated</button>
+
+</div>
+
+
+
+<div id="Newarrivals" class="tabcontent">
+
+  <h3>New Arrivals</h3>
+
+  <p><?php echo $block->getLayout()->createBlock('Evdpl\Priceformat\Block\Product\NewProductsList')->setTemplate("Evdpl_Priceformat::product/newproductsblock.phtml")->toHtml();?></p>
+
+</div>
+
+
+
+<div id="Bestsellers" class="tabcontent">
+
+  <h3>Best Sellers</h3>
+
+  <?php echo $block->getLayout()->createBlock('Evdpl\Priceformat\Block\Product\BestsellerList')->setTemplate("Evdpl_Priceformat::product/bestsellerblock.phtml")->toHtml();?>
+
+ 
+
+</div>
+
+
+
+<div id="Toprated" class="tabcontent">
+
+  <h3>Top Rated</h3>
+<?php echo $block->getLayout()->createBlock('Evdpl\Priceformat\Block\Product\Toprated')->setTemplate("Evdpl_Priceformat::product/toprated.phtml")->toHtml();?>
+
+</div>
+<div class="category_tab_view"><a href="#"  target="_blank" ></a>
+</div>
+</div>
+
+<script type="text/javascript">
+
+function openCity(evt, cityName) {
+
+    // Declare all variables
+
+    var i, tabcontent, tablinks;
+
+
+
+    // Get all elements with class="tabcontent" and hide them
+
+    tabcontent = document.getElementsByClassName("tabcontent");
+
+    for (i = 0; i < tabcontent.length; i++) {
+
+        tabcontent[i].style.display = "none";
+
+    }
+
+
+
+    // Get all elements with class="tablinks" and remove the class "active"
+
+    tablinks = document.getElementsByClassName("tablinks");
+
+    for (i = 0; i < tablinks.length; i++) {
+
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+
+    }
+
+
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+
+    document.getElementById(cityName).style.display = "block";
+
+    evt.currentTarget.className += " active";
+
+} 
+
+document.getElementById("defaultOpen").click();
+
+</script>

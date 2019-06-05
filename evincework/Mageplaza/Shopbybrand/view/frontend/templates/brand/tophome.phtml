@@ -1,0 +1,58 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+<?php
+$helper = $this->helper('Mageplaza\Shopbybrand\Helper\Data');
+$brands = $block->getDispOnHome();
+?>
+<div class="home-top-brands">
+    <div class="block-title-main">
+        <h2><?php echo __('Top Brands'); ?></h2>
+        <div class="title-border"></div>
+    </div>
+    <ul>
+        <?php foreach ($brands as $brand) { ?>
+            <li>
+                <div class="top-single-brand">
+                    <div class="brand-image">
+                        <?php if ($brand->getBrandProductImage()): ?>
+                            <a href="<?php echo $block->helper()->getBrandUrl($brand) ?>" target="_blank" alt="<?php echo $brand->getValue() ?>">
+                                <img class="top-barnd-img" src="<?php echo $block->helper()->getBrandProductImageUrl($brand) ?>">
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                    <h2 class="brand-name">
+                        <a href="<?php echo $block->helper()->getBrandUrl($brand) ?>" target="_blank">
+                            <?php echo $brand->getValue() ?>
+                        </a>
+                    </h2>
+                    <div class="more-btn">                    
+                        <a href="<?php echo $block->helper()->getBrandUrl($brand) ?>" target="_blank">
+                            <?php echo 'Explore'; //$this->__('Explore'); ?>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <?php
+        }
+        ?>
+    </ul>
+</div>

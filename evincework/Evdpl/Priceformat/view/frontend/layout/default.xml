@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+       <css src="Evdpl_Priceformat::css/bestsellerproducts.css"/>
+      <!-- <css src="Evdpl_Priceformat::css/owl.carousel.css"/>
+       <css src="Evdpl_Priceformat::css/owl.theme.old.css"/> 
+          <script src="Evdpl_Priceformat::js/owl.carousel.min.js"/> -->
+    </head>
+</page>

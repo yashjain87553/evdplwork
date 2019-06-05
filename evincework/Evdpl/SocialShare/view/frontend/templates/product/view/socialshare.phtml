@@ -1,0 +1,41 @@
+<?php
+$_product = $block->getProduct(); // GET THE PRODUCT
+?>
+
+<div class="social-share-main">
+    <div class="social-share-icon" id="share">Share</div>
+    <div class="wdm-social-icons" data-role="wdm-social-icons">
+        <!-- FACEBOOK -->
+        <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($_product->getProductUrl()); ?>&t=<?php echo urlencode($_product->getName()) ?>" onclick='javascript:window.open(this.href, "", "width=640,height=480,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes");return false' title="Share on FaceBook">
+            <img src="<?php echo $this->getViewFileUrl('images/fb-med.png'); ?>" alt="FaceBook" width="5%">
+        </a>
+
+        <!-- TWITTER -->
+        <a href="http://twitter.com/home/?status=<?php echo urlencode($_product->getProductUrl()); ?>(<?php echo urlencode($_product->getName()) ?>)" onclick='javascript:window.open(this.href, "", "width=640,height=480,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes");return false' title="Share on Twitter">
+            <img src="<?php echo $this->getViewFileUrl('images/tw.png'); ?>" alt="Twitter" width="5%">
+        </a>
+
+        <!-- Google Plus -->
+        <a href="https://plus.google.com/share?url=<?php echo urlencode($_product->getProductUrl()); ?>(<?php echo urlencode($_product->getName()) ?>)" onclick='javascript:window.open(this.href, "", "width=640,height=480,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes");return false' title="Share on Google Plus">
+            <img src="<?php echo $this->getViewFileUrl('images/gp.png'); ?>" alt="Google Plus" width="5%">
+        </a>
+
+        <!-- Mail To -->
+        <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site <?php echo urlencode($_product->getProductUrl()); ?>(<?php echo urlencode($_product->getName()) ?>)"
+           title="Share by Email">
+            <img src="http://png-2.findicons.com/files/icons/573/must_have/48/mail.png">
+        </a>
+    </div>
+</div>
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+        $(document).ready(
+                function () {
+                    $("#share").click(function () {
+                        $(".wdm-social-icons").slideToggle('slow');
+                    });
+                });
+    });
+</script>

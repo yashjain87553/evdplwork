@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <script src="Evdpl_Dailydeals::js/jquery-3.2.1.js"/> 
+         <script src="Evdpl_Dailydeals::js/jquery.countdownTimer.js"/>
+        <!-- <script src="Evdpl_Dailydeals::js/jquery.countdownTimer.min.js"/> -->
+        <css src="Evdpl_Dailydeals::css/jquery.countdownTimer.css"/>  
+    </head>
+    <body>
+
+    </body>
+</page>

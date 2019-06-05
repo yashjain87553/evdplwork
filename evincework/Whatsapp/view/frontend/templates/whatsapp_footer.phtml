@@ -1,0 +1,30 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$request = $objectManager->get('Magento\Framework\App\Action\Context')->getRequest();
+if ($request->getFullActionName() == 'catalog_product_view') {
+$_helper = $this->helper('Evince\Whatsapp\Helper\Data');
+$buttonSize = $_helper->getButtonSize();
+$buttonPos = $_helper->getButtonPos();
+$customsharemsg = $_helper->getCustomShareMessage();
+$footerCol = $_helper->getBackcolor();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');//get current category
+$productName = $product->getName();
+if(strlen($customsharemsg)>0) {$msg = $customsharemsg; }
+else {$msg = "Hey! Take a look at this awesome product:";}
+
+$prd = $productName;
+$display_des = $msg.' '.$prd;
+
+?>
+<?php 
+if($buttonPos == 2 || $buttonPos == 3)
+{
+?>
+ 
+<div id="whats_app_button_footer" style="background-color: <?php echo '#'.$footerCol;?>;    bottom: 0;    color: #fff;    padding: 5px 0px;    position: fixed;    text-align: center;    width: 100%;    display:none;    z-index:9999999999999;    "><div>
+<a href="whatsapp://send" data-text='<?php echo $display_des;?>'
+	data-href="" class="wa_btn wa_btn_<?php echo $buttonSize?>" style="display:none;">Share</a>
+</div>
+</div>
+<?php  } }?>

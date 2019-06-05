@@ -1,0 +1,289 @@
+<?php
+/**
+
+ * Copyright © 2016 Magento. All rights reserved.
+
+ * See COPYING.txt for license details.
+
+ */
+// @codingStandardsIgnoreFile
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$searches = $objectManager->create('Magento\Search\Model\ResourceModel\Query\Collection');
+$tot_searches = count($searches);
+$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+$base_url = $storeManager->getStore()->getBaseUrl();
+?>
+<div class="footer-container">
+    <div class="container">
+        <?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-services')->toHtml(); ?>
+
+        <?php //echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-top')->toHtml(); ?>
+        <div class="footer-top">
+            <div class="row">
+                <div class="col-md-2 col-sm-6 col-xs-12">
+                    <div class="footer-online-shop">
+                        <?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_online_shopping_menu')->toHtml(); ?>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="footer-useful-links">
+                        <?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_useful_links_menu')->toHtml(); ?>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="footer-newsletter">
+                        <h5>Need Lucky Offer ?</h5>
+                        <?php echo $this->getLayout()->createBlock("Magento\Newsletter\Block\Subscribe")->setTemplate("Magento_Newsletter::subscribe.phtml")->toHtml(); ?>
+                    </div>
+                    <div class="footer-soc-icons">
+                        <h5>Keep in Touch</h5>
+                        <ul class="social_icons">
+                            <li class="facebook"><a target="_blank" title="facebook" href="https://www.facebook.com/luckylips.in/">&nbsp;</a></li>
+                            <li class="twitter"><a target="_blank" title="Twitter" href="https://twitter.com/luckylips_in">&nbsp;</a></li>
+                            <li class="instagram"><a target="_blank" title="Instagram" href="https://www.instagram.com/luckylips_in/">&nbsp;</a></li>
+                            <li class="pintrest"><a target="_blank" title="Pinterest" href="https://www.pinterest.com/luckylipsin/">&nbsp;</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="footer-about-luckylips">
+                        <?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_luckylips_text')->toHtml(); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="middle-footer">
+            <div class="secure-shopping">
+                <?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('secure-shopping-logos')->toHtml(); ?>
+            </div>
+
+            <div class="payment-options">
+                <?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-payment-options')->toHtml(); ?>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom-content">
+
+            <h5>Popular Searches</h5>
+            <ul class="popular-searches-list">
+
+                <?php
+                $i = 1;
+                foreach ($searches as $search):
+
+                    $query = str_replace(' ', '+', $search['query_text']);
+                    ?>
+                    <li>
+
+                        <a href="<?php echo $base_url . 'catalogsearch/result/?q=' . $query; ?>" target="_blank"><?php echo $search['query_text']; ?></a>
+                    </li>
+                    <?php
+                    $i++;
+                endforeach;
+                ?>
+
+            </ul>
+
+
+            <?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-bottom')->toHtml(); ?>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+<div class="footer-copyright">
+    <div class="container">
+        <address><?php /* @escapeNotVerified */ echo $block->getCopyright() ?></address>
+    </div>
+</div>
+<div id="scroll-to-top">
+    <a class="scrollup" href="#" title="Scroll to Top">
+        <span>Top</span>
+    </a>
+</div>
+
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+        $("#product-addtocart-button-1").click(function () {
+            $("#product_addtocart_form").submit(); // Form submission.
+        });
+        $("#buy-now").click(function () {
+            $("#product_addtocart_form").submit(); // Form submission.
+        });
+        $(window).load(function () {
+            $('.page-loader').fadeOut();
+        });
+        jQuery(document).ready(function () {
+            jQuery('#shopping-cart-table')
+                    .on(
+                            'change',
+                            'input[name$="[qty]"]',
+                            function () {
+                                var form = jQuery(jQuery(this).closest('form'));
+
+                                // we'll extract the action and method attributes out of the form
+
+                                // kick off an ajax request using the form's action and method,
+                                // with the form data as payload
+                                jQuery.ajax({
+                                    url: form.attr('action'),
+                                    method: form.attr('method'),
+                                    data: form.serializeArray()
+                                });
+
+                            }
+                    );
+            $('.no-brands').hide();
+            $('#s').keyup(function () {
+                if ($(this).val().length > 0) {
+                    var valThis = $(this).val().toLowerCase();
+                    $('div.brand-title').hide();
+                    $('div.menu-top-brands').hide();
+                    $('.brandList>li').each(function () {
+                        var text = $(this).children('a').text().toLowerCase();
+                        (text.indexOf(valThis) == 0) ? $(this).show() : $(this).hide();
+                        (text.indexOf(valThis) == 0) ? $(this).addClass('show') : $(this).removeClass('show');
+                        //               (text.indexOf(valThis) == 0) ? $(this).closest('div').show() : $(this).closest('div').hide();
+                        var numItems = $('.brandList>li.show').length;
+                        if (numItems == 0) {
+                            //alert('Hello');
+                            $('.no-brands').show();
+                        } else
+                        {
+                            $('.no-brands').hide();
+                        }
+                    });
+                } else {
+                    $('div.brand-title').show();
+                    $('div.menu-top-brands').show();
+                    $('.brandList>li').show();
+                }
+
+
+            });
+            jQuery('.custom-customer-menu-title').hover(function () {
+                jQuery('.custom-customer-menu-links').css("display", "block");
+            }, function () {
+                jQuery('.custom-customer-menu-links').css("display", "none");
+            });
+            jQuery('.nav-pills > li').mouseover(function () {
+                jQuery(this).find('a').tab('show');
+            });
+            jQuery('.nav-pills > li').mouseout(function () {
+                jQuery(this).find('a').tab('hide');
+            });
+            jQuery('.catalog-product-view .products.list > .product-item').each(function () {
+                var discount = jQuery(this).find('span.discount');
+                var luckycash = jQuery(this).find('span.rewards__product-points');
+
+                jQuery(this).find('.price-box.price-final_price').append(discount);
+                jQuery(this).find('.price-box.price-final_price').append(luckycash);
+            });
+            jQuery('.catalog-product-view .products.list > .product-item-info').each(function () {
+                var discount = jQuery(this).find('span.discount');
+                var luckycash = jQuery(this).find('span.rewards__product-points');
+
+                jQuery(this).find('.price-box.price-final_price').append(discount);
+                jQuery(this).find('.price-box.price-final_price').append(luckycash);
+            });
+            jQuery("#review-scroll-button").click(function () {
+                jQuery('.data.item.title').removeClass('active');
+                jQuery('#tab-label-reviews').addClass('active');
+                jQuery('.data.item.content').css("display", "none");
+                jQuery('#reviews').css("display", "block");
+                jQuery('html, body').animate({
+                    scrollTop: jQuery(".review-add").offset().top - 180
+                }, 500);
+            });
+            if (jQuery('.combo-viewed-main').children('div').length < 1) {
+                jQuery('.combo-viewed-main').hide();
+                //alert('hello');
+            }
+//            jQuery(".mega-col .level1.subgroup > a").click(function (e) {
+//                var linkValue = jQuery(this).attr("href");
+//                alert(linkValue);
+//                window.location.href = linkValue;
+//            });
+            if (jQuery(".scrollup").length > 0) {
+                // scroll-to-top button show and hide
+                jQuery(window).scroll(function () {
+                    if (jQuery(this).scrollTop() > 100) {
+                        jQuery('.scrollup').fadeIn();
+                    } else {
+                        jQuery('.scrollup').fadeOut();
+                    }
+                });
+                // scroll-to-top animate
+                jQuery('.scrollup').click(function () {
+                    jQuery("html, body").animate({scrollTop: 0}, 600);
+                    return false;
+                });
+            }
+//            jQuery(window).scroll(function () {
+//                if (jQuery(this).scrollTop() > 100)
+//                {
+//                    jQuery('.ves-megamenu.ves-horizontal').fadeOut();
+//                } else
+//                {
+//                    jQuery('.ves-megamenu.ves-horizontal').fadeIn();
+//                }
+//            });
+//            jQuery(window).on('load resize', function () {
+//                //$('.content .right').width($(this).width() - 480);
+//                if (jQuery(window).width() >= 768) {
+//                    jQuery('.ves-menu .navigation > ul').addClass('nav-down');
+//                } 
+//            });
+var didScroll;
+var lastScrollTop = 0;
+var delta = 50;
+var navbarHeight = $('.sections.nav-sections').outerHeight();
+
+$(window).scroll(function(event){
+    didScroll = true;
+});
+
+setInterval(function() {
+    if (didScroll) {
+        hasScrolled();
+        didScroll = false;
+    }
+}, 250);
+
+function hasScrolled() {
+    var st = $(this).scrollTop();
+    
+    // Make sure they scroll more than delta
+    if(Math.abs(lastScrollTop - st) <= delta)
+        return;
+    
+    // If they scrolled down and are past the navbar, add class .nav-up.
+    // This is necessary so you never see what is "behind" the navbar.
+    if (st > lastScrollTop && st > navbarHeight){
+        // Scroll Down
+        $('.sections.nav-sections').removeClass('nav-down').addClass('nav-up');
+    } else {
+        // Scroll Up
+        if(st + $(window).height() < $(document).height()) {
+            $('.sections.nav-sections').removeClass('nav-up').addClass('nav-down');
+        }
+    }
+    
+    lastScrollTop = st;
+}
+
+        });
+    });
+    
+</script>
+
+
+

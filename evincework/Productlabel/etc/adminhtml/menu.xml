@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="Evdpl_Productlabel::Evdpl" title="Evdpl Product label" module="Evdpl_Productlabel" sortOrder="55" resource="Evdpl_Productlabel::evdpl" parent="Magento_Backend::content"/>
+        <add id="Evdpl_Productlabel::Productlabel" title="Product Label" module="Evdpl_Productlabel" sortOrder="10" action="labels/label/Index" resource="Evdpl_Productlabel::productlabel" parent="Evdpl_Productlabel::Evdpl"/>
+    </menu>
+</config>

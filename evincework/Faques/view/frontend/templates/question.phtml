@@ -1,0 +1,160 @@
+<?php
+$_faqss = $this->getFaqs();
+if (count($_faqss) > 0) {
+    ?>
+
+
+    <div class="faq-cate-list">
+        <button id="TopQueries" class="active">Top Queries</button> 
+        <button id="OrderRelated">Order Related</button>
+        <button id="CancellationReplacement">Cancellation & Replacement</button>
+        <button id="ReturnRefund">Return & Refund</button>
+        <button id="Shiping">Shipping</button>
+        <button id="Payments">Payments</button>
+        <button id="OtherFAQ">Other FAQ's</button>
+
+    </div>
+
+    <div class="faq faqs-list-container">
+        <ol  class="accordion">
+            <?php foreach ($_faqss as $_faqs) : ?>
+
+                <li class="<?php echo $_faqs->getQuestionType(); ?>">
+                    <a href="#faq"><?php echo $_faqs->getQuestionTitle(); ?></a>
+                    <div class="cont faqs-list-ans" style="display: none;">
+                        <?php echo $_faqs->getAnswer(); ?>
+                    </div>
+                </li>
+
+            <?php endforeach; ?>
+        </ol>
+    </div>
+    <?php
+} else {
+
+    echo __('There are no FAQs at this moment');
+}
+?>
+</form>
+<script type="text/javascript">// <![CDATA[
+//    jQuery(document).ready(function () {
+//        jQuery('ol').accordion();
+//    });
+    jQuery(document).ready(function () {
+        jQuery('ol').accordion();
+//        jQuery('.faq-cate-list button').removeClass('active');
+//        jQuery(this).addClass('active');
+//        jQuery('.TopQueries').css('display', 'block');
+//        jQuery('.CancellationReplacement').css('display', 'none');
+//        jQuery('.OrderRelated').css('display', 'none');
+//        jQuery('.ReturnRefund').css('display', 'none');
+//        jQuery('.Shiping').css('display', 'none');
+//        jQuery('.Payments').css('display', 'none');
+//        jQuery('.OtherFAQ').css('display', 'none');
+//
+//
+//        jQuery("#OrderRelated").click(function () {
+//            jQuery('.faq-cate-list button').removeClass('active');
+//            jQuery(this).addClass('active');
+//            jQuery('.TopQueries').css('display', 'none');
+//            jQuery('.CancellationReplacement').css('display', 'none');
+//            jQuery('.OrderRelated').css('display', 'block');
+//            jQuery('.ReturnRefund').css('display', 'none');
+//            jQuery('.Shiping').css('display', 'none');
+//            jQuery('.Payments').css('display', 'none');
+//            jQuery('.OtherFAQ').css('display', 'none');
+//
+//        });
+//        jQuery("#CancellationReplacement").click(function () {
+//            jQuery('.faq-cate-list button').removeClass('active');
+//            jQuery(this).addClass('active');
+//            jQuery('.TopQueries').css('display', 'none');
+//            jQuery('.CancellationReplacement').css('display', 'block');
+//            jQuery('.OrderRelated').css('display', 'none');
+//            jQuery('.ReturnRefund').css('display', 'none');
+//            jQuery('.Shiping').css('display', 'none');
+//            jQuery('.Payments').css('display', 'none');
+//            jQuery('.OtherFAQ').css('display', 'none');
+//
+//        });
+//
+//
+//        jQuery("#ReturnRefund").click(function () {
+//            jQuery('.faq-cate-list button').removeClass('active');
+//            jQuery(this).addClass('active');
+//            jQuery('.TopQueries').css('display', 'none');
+//            jQuery('.CancellationReplacement').css('display', 'none');
+//            jQuery('.OrderRelated').css('display', 'none');
+//            jQuery('.ReturnRefund').css('display', 'block');
+//            jQuery('.Shiping').css('display', 'none');
+//            jQuery('.Payments').css('display', 'none');
+//            jQuery('.OtherFAQ').css('display', 'none');
+//
+//        });
+//
+//        jQuery("#Shiping").click(function () {
+//            jQuery('.faq-cate-list button').removeClass('active');
+//            jQuery(this).addClass('active');
+//            jQuery('.TopQueries').css('display', 'none');
+//            jQuery('.CancellationReplacement').css('display', 'none');
+//            jQuery('.OrderRelated').css('display', 'none');
+//            jQuery('.ReturnRefund').css('display', 'none');
+//            jQuery('.Shiping').css('display', 'block');
+//            jQuery('.Payments').css('display', 'none');
+//            jQuery('.OtherFAQ').css('display', 'none');
+//
+//        });
+//
+//
+//        jQuery("#Payments").click(function () {
+//            jQuery('.faq-cate-list button').removeClass('active');
+//            jQuery(this).addClass('active');
+//            jQuery('.TopQueries').css('display', 'none');
+//            jQuery('.CancellationReplacement').css('display', 'none');
+//            jQuery('.OrderRelated').css('display', 'none');
+//            jQuery('.ReturnRefund').css('display', 'none');
+//            jQuery('.Shiping').css('display', 'none');
+//            jQuery('.Payments').css('display', 'block');
+//            jQuery('.OtherFAQ').css('display', 'none');
+//
+//        });
+//
+//
+//        jQuery("#OtherFAQ").click(function () {
+//            jQuery('.faq-cate-list button').removeClass('active');
+//            jQuery(this).addClass('active');
+//            jQuery('.TopQueries').css('display', 'none');
+//            jQuery('.CancellationReplacement').css('display', 'none');
+//            jQuery('.OrderRelated').css('display', 'none');
+//            jQuery('.ReturnRefund').css('display', 'none');
+//            jQuery('.Shiping').css('display', 'none');
+//            jQuery('.Payments').css('display', 'none');
+//            jQuery('.OtherFAQ').css('display', 'block');
+//
+//        });
+//
+//        jQuery("#TopQueries").click(function () {
+//            jQuery('.faq-cate-list button').removeClass('active');
+//            jQuery(this).addClass('active');
+//            jQuery('.TopQueries').css('display', 'block');
+//            jQuery('.CancellationReplacement').css('display', 'none');
+//            jQuery('.OrderRelated').css('display', 'none');
+//            jQuery('.ReturnRefund').css('display', 'none');
+//            jQuery('.Shiping').css('display', 'none');
+//            jQuery('.Payments').css('display', 'none');
+//            jQuery('.OtherFAQ').css('display', 'none');
+//
+//        });
+        jQuery('.accordion li').hide();
+        jQuery('.accordion li.TopQueries').show();
+        jQuery(".faq-cate-list button").click(function () {
+            var tab_id = jQuery(this).attr("id");
+            jQuery('.faq-cate-list button').removeClass('active');
+            jQuery(this).addClass('active');
+            if (jQuery('.accordion li').hasClass(tab_id)) {
+                jQuery('.accordion li').hide();
+                jQuery('.accordion li.'+tab_id).show();
+            }
+        });
+    });
+</script>

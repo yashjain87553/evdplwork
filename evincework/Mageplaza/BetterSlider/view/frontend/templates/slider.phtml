@@ -1,0 +1,129 @@
+<div class="main_banner">
+
+    <div class="owl-carousel mp-owl-carousel ">
+
+        <?php
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+        $objDate = $objectManager->create('Magento\Framework\Stdlib\DateTime\DateTime');
+
+        $date = strtotime($objDate->gmtDate());
+
+        foreach ($block->getSliders() as $slider):
+
+            if (($slider->getUploadFile()) != "") {
+
+                $Validfrom = strtotime($slider->getValidFrom());
+
+                $Validto = strtotime($slider->getValidTo());
+
+                if ($Validfrom < $date && $Validto > $date) {
+
+                    ?>
+
+                    <?php $url = $slider->getUrl() ? $slider->getUrl() : '#'; ?>
+
+                    <div class="item">
+
+                        <?php if ($url == '#') {
+
+                            ?>
+
+                            <img src="<?php echo $slider->getBannerUrl(); ?>" alt="<?php echo $slider->getName(); ?>">
+
+                            <?php
+
+                        } else {
+
+                            ?>
+
+                            <a href="<?php echo $url; ?>" target="_blank"><img src="<?php echo $slider->getBannerUrl(); ?>" alt="<?php echo $slider->getName(); ?>"></a>
+
+                        <?php } ?>
+
+                    </div>
+
+                    <?php
+
+                }
+
+            }
+
+            ?>
+
+        <?php endforeach; ?>		
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    require([
+
+        'jquery', 'Mageplaza_BetterSlider/js/owl.carousel.min'
+
+    ], function () {
+
+        jQuery(document).ready(function () {
+
+            jQuery(".mp-owl-carousel").owlCarousel({
+
+                loop:true,
+
+                autoplay:true,
+
+                items:1,
+
+                nav:false,
+
+                margin:10,
+
+                responsiveClass:true,
+
+                responsive: {
+
+                        0: {
+
+                            items: 1
+
+                        },
+
+                        600: {
+
+                            items: 1
+
+                        },
+
+                        1000: {
+
+                            items: 1
+
+                        }
+
+                    }
+
+            });
+
+            jQuery('.main_banner').on('mouseover',function(){
+
+            jQuery('.mp-owl-carousel').trigger('stop.owl.autoplay');
+
+        });
+
+            jQuery('.main_banner').on('mouseleave',function(){
+
+            jQuery('.mp-owl-carousel').trigger('play.owl.autoplay',[1000]);
+
+             });
+
+    });
+
+    });
+
+   
+
+
+
+</script>

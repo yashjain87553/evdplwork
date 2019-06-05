@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Evdpl\Testimonial\Block\Adminhtml\Testimonial\Edit" name="Evdpl_Testimonial_testimonial_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Evdpl\Testimonial\Block\Adminhtml\Testimonial\Edit\Tabs" name="Evdpl_Testimonial_testimonial_tabs">
+                <block class="Evdpl\Testimonial\Block\Adminhtml\Testimonial\Edit\Tab\Testimonialinfo" name="Evdpl_Testimonial_testimonial_edit_tab_testimonialinfo"/>
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">General</argument>
+                    <argument name="block" xsi:type="string">Evdpl_Testimonial_testimonial_edit_tab_testimonialinfo</argument>
+                </action> 
+            </block>
+        </referenceContainer>
+         </body>
+</page>

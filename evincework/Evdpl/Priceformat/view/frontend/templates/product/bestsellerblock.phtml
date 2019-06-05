@@ -1,0 +1,315 @@
+<?php
+/* $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+  $y = $objectManager->get('\Magento\Catalog\Model\Session');
+  if($y->getdata('xx')){
+  echo "working";
+  exit; */
+
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Framework\App\Action\Action;
+?>
+<?php
+date_default_timezone_set('Asia/Kolkata');
+$currentdate = date('Y-m-d') . " 00:00:00";
+$_productCollection = $block->getLoadedProductCollection();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+$imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+$abstractProductBlock = $block->getLayout()->createBlock('\Magento\Catalog\Block\Product\AbstractProduct');
+$templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+$viewMode = 'grid';
+$image = 'category_page_grid';
+$showDescription = false;
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$pos = $block->getPositioned();
+?>
+<div class="pad-main-bottom wrapper bestselling-product-main grid products-grid">
+
+
+    <ol class="products list products-grid items product-items owl-carousel owl-theme bestsellerproducts" id="main_best_seller">
+        <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+        <?php
+        $count = 0;
+        foreach ($_productCollection as $_product) {
+            if ($_product->getIsSalable()) {
+                $productImage = $block->getImage($_product, $image);
+                /*
+                  $stockItem = $block->getStockItem($_product->getId());
+                  $stockQty = $stockItem->getQty();
+                 */
+                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                $StockState = $objectManager->get('\Magento\CatalogInventory\Api\StockStateInterface');
+                $stockQty = $StockState->getStockQty($_product->getId(), $_product->getStore()->getWebsiteId());
+
+
+                if ($stockQty != '' || $stockQty > 0) {
+                    if ($pos != null) {
+                        $position = ' style="left:' . $productImage->getWidth() . 'px;'
+                                . 'top:' . $productImage->getHeight() . 'px;"';
+                    }
+                    /*  $count++;
+                      if($count>=8)
+                      {
+                      break;
+                      }
+                      else{ */
+                    ?>
+                    <li class="item product product-item">
+                        <div class="product-item-info" data-container="product-grid">
+                            <?php
+                            $prod = $objectManager->get('Magento\Catalog\Model\Product')->load($_product->getId());
+
+
+                            $pdtagid = $prod->getProductTag();
+                            $attr = $prod->getResource()->getAttribute('product_tag');
+
+                            $attribute_code = "offer_text"; // attribute with text value
+                            $description_attribute = $_product->getResource()->getAttribute($attribute_code);
+                            $attribute_value = $_product->getResource()->getAttributeRawValue($_product->getId(), $attribute_code, $_product->getStoreId());
+
+                            if ($attribute_value != '') {
+                                if ($attr->usesSource()) {
+                                    if ($pdtagid != '96' && $pdtagid != '97') {
+                                        $pid = 'offertext' . $_product->getId();
+                                        echo $optionText = '<div class="ribbon bestseller discount"><a href="javascript:void(0);"  id="' . $_product->getId() . '">' . $attr->getSource()->getOptionText($pdtagid) . '</a></div>';
+                                    } else {
+                                        echo $optionText = '<div class="ribbon">' . $attr->getSource()->getOptionText($pdtagid) . '</div>';
+                                    }
+                                }
+                            }
+                            ?>
+                            
+<?php $parentIds = $objectManager->get('Magento\ConfigurableProduct\Model\Product\Type\Configurable')->getParentIdsByChild($_product->getId());
+$parentId = array_shift($parentIds);
+if($parentId): 
+    $product = $objectManager->create('Magento\Catalog\Model\Product')->load($parentId); 
+$color_val = $_product->getData('color');
+endif;
+?>
+                            <?php // Product Image     ?>
+                            <?php if($parentId): ?>
+                            <a href="<?php /* @escapeNotVerified */ echo $product->getProductUrl().'?color='.$color_val; ?>" class="product photo product-item-photo" tabindex="-1"  target="_blank">
+                            <?php else: ?>
+                            <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1"  target="_blank">
+                                <?php endif; ?>
+                                <span style="width:240px;" class="product-image-container">
+                                    <span style="padding-bottom: 137%;" class="product-image-wrapper">
+                                        <?php
+                                        // ++$count;
+                                        $imageUrl = $this->helper('Magento\Catalog\Helper\Image')
+                                                ->init($_product, 'product_page_image_large')
+                                                ->constrainOnly(FALSE)
+                                                ->keepAspectRatio(TRUE)
+                                                ->keepFrame(FALSE)
+                                                ->resize(270, 371)
+                                                ->getUrl();
+                                        ?>
+                                        <img class="product-image-photo" src="<?php echo $imageUrl; ?>" />
+                                        <!--<img class="product-image-photo" src="<?php //echo $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image');                                        ?>"height="240" width="240" />-->
+                                    </span>
+                                </span>
+                                <div id="bestsellect-products-<?php echo $_product->getId(); ?>" style="display:none" class="offer_textclass" onmouseout="jQuery(this).hide();">
+                                <!--<div class="offer_closebutton"><a href="javascript:void(0);" onclick="hidebox('bestsellect-products-<?php echo $_product->getId(); ?>')">X</a></div>-->
+                                <?php
+                                echo $attribute_value;
+                                ?>
+                            </div> 
+                            </a>
+
+                            <div class="product details product-item-details">
+                                <div style="padding: 0 2px;"><?php echo $block->getProductDetailsHtml($_product); ?></div>
+                                <?php
+                                $_productNameStripped = $block->stripTags($_product->getName(), null, true);
+                                ?>
+                                <?php
+                                    if($parentId): 
+    ?>
+    <strong class="product name product-item-name">
+                                    <a class="product-item-link"  target="_blank"
+                                       href="<?php /* @escapeNotVerified */ echo $product->getProductUrl().'?color='.$color_val; ?>">
+                                           <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                                    </a>
+                                </strong>
+ <?php
+ else: ?>
+     <strong class="product name product-item-name">
+                                    <a class="product-item-link"  target="_blank"
+                                       href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>">
+                                           <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                                    </a>
+                                </strong>
+<?php endif;
+?>
+                                
+                                
+                                <?php 
+
+                                    
+                                if ($_product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+
+ $_children = $_product->getTypeInstance()->getUsedProducts($_product);
+  $colorarr = array();
+ foreach ($_children as $child){
+  $colorarr[$child->getColor()] = $child->getColor();
+ }
+ $total_shades = count($colorarr);
+if($total_shades>1):
+echo '<span class="no-of-shades">'.$total_shades.' Shades</span>';
+elseif($total_shades==1):
+    echo '<span class="no-of-shades">'.$total_shades.' Shade</span>';
+endif;
+                                }
+               ?>
+                                <?php echo $block->getReviewsSummaryHtml($_product, $templateType); ?> 
+                                <?php //echo $block->getReviewsSummaryHtml($_product, $templateType);   ?>
+                                <?php
+                                echo $abstractProductBlock->getProductPrice($_product);
+                                $originalPrice = $_product->getPrice();
+                                $finalPrice = $_product->getFinalPrice();
+
+                                $percentage = 0;
+                                if ($originalPrice > $finalPrice) {
+                                    $percentage = number_format(($originalPrice - $finalPrice) * 100 / $originalPrice, 0);
+                                }
+
+                                if ($percentage) {
+                                    echo '<span class="discount">(-' . $percentage . '%)</span>';
+                                }
+                                ?>
+                            </div>
+                            <div class="product actions product-item-actions">
+                                <div class="actions-primary">
+                                    <?php if ($_product->isSaleable()): ?>
+                                        <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+                                        <form data-role="tocart-form" action="<?php /* @escapeNotVerified */ echo $postParams['action']; ?>" method="post">
+                                            <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $postParams['data']['product']; ?>">
+                                            <input type="hidden" name="<?php /* @escapeNotVerified */ echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php /* @escapeNotVerified */ echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
+                                            <?php echo $block->getBlockHtml('formkey') ?>
+                                            <button type="submit"
+                                                    title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                    class="action tocart primary">
+                                                <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                                            </button>
+                                        </form>
+                                    <?php else: ?>
+                                        <?php if ($_product->getIsSalable()): ?>
+                                            <div class="stock available"><span><?php /* @escapeNotVerified */ echo __('In stock') ?></span></div>
+                                        <?php else: ?>
+                                            <div class="stock unavailable"><span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></div>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
+                                <div data-role="add-to-links" class="actions-secondary"<?php //echo strpos($pos, $viewMode . '-secondary') ? $position : '';                ?>>
+                                    <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()): ?>
+                                        <a href="#"
+
+                                           title="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
+                                           aria-label="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
+                                           data-post='<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_product) ?>'
+                                           class="action towishlist" data-action="add-to-wishlist"
+                                           role="button">
+                                            <span><?php echo __('Add to Wish List') ?></span>
+                                        </a>
+                                    <?php endif; ?>
+                                    <?php
+                                    $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
+                                    ?>
+<!--                                    <a href="#"
+                                       class="action tocompare"
+                                       title="<?php //echo $block->escapeHtml(__('Add to Compare')); ?>"
+                                       aria-label="<?php //echo $block->escapeHtml(__('Add to Compare')); ?>"
+                                       data-post='<?php //echo $compareHelper->getPostDataParams($_product); ?>'
+                                       role="button">
+                                        <span><?php //echo __('Add to Compare') ?></span>
+                                    </a>-->
+                                </div>
+                            </div>    
+                        </div>
+                    </li>
+                    <?php
+                }
+            }
+        }
+        ?>
+    </ol>
+
+</div>
+
+<script type="text/javascript">
+    require(['jquery', 'Evdpl_Priceformat/js/owl.carousel.min'], function ($) {
+        $(document).ready(function ($) {
+
+            jQuery("#main_best_seller").owlCarousel({
+                nav: true,
+                dots: false,
+                responsiveClass: true,
+                autoplay: true,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 4
+                    }
+                }
+            });
+        });
+        ;
+    });
+</script>
+<script type="text/javascript">
+    require(['jquery', 'jquery/ui'], function ($) {
+        jQuery('body').on('mouseover', '.ribbon.bestseller.discount a', function () {
+
+            var id = jQuery(this).attr('id');
+
+            jQuery('#bestsellect-products-' + id).show();
+        });
+        /* jQuery(document).ready(function ($) {
+         jQuery(".ribbon.discount a").hover(function () {
+         var id = jQuery(this).attr('id');
+         
+         jQuery('#desc_' + id).show();
+         }, function () {
+         jQuery('#desc_' + id).hide();
+         });
+         });*/
+    });
+
+    function hidebox(boxID)
+    {
+        var box_id = boxID;
+        var nid = document.getElementById(box_id);
+
+        nid.style.display = 'none';
+    }
+</script>
+<script type="text/javascript">
+    require([
+        'jquery'
+    ], function ($) {
+        jQuery(document).ready(function () {
+            jQuery('.products.list.bestsellerproducts li').each(function () {
+                var discount = jQuery(this).find('span.discount');
+                var luckycash = jQuery(this).find('span.rewards__product-points');
+
+                jQuery(this).find('.price-box.price-final_price').append(discount);
+                jQuery(this).find('.price-box.price-final_price').append(luckycash);
+            });
+        });
+    });
+</script>
+<script type="text/javascript">
+    require(['jquery', 'mage/mage', 'Magento_Catalog/product/view/validation',
+        'Magento_Catalog/js/catalog-add-to-cart'], function ($) {
+        jQuery(document).ready(function (jQuery) {
+            jQuery('.products.list.bestsellerproducts li form').catalogAddToCart();
+        });
+    });
+</script>

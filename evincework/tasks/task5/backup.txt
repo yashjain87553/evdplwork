@@ -1,0 +1,277 @@
+user.js 
+function readRecords() {
+  $.ajax({
+   url:"readRecords.php",
+   success :function(data){
+    $(".ajax_replace").html(data);
+  }
+});
+}
+function modalshow(){
+  $("#check").hide();
+  $("#registerbutton").show();
+  $("#updatebutton").hide();
+  $("#registerusername").val("");
+  $("#registerpassword").val("");
+  $('input[name=gender]:checked').each(function(){
+    $(this).prop('checked', false);  
+  });
+  
+  $("#myModal").modal("show");
+}
+function registerentry()
+{ 
+    
+  var username=$("#registerusername").val();
+  var password=$("#registerpassword").val();
+  var gender=$('input[name=gender]:checked').val();
+  var combo=$('#sel1');     
+  var selectedval = $(combo, 'option:selected').val();
+  $.ajax({
+    url : "checkrecords.php",
+    type:"POST",
+    data :{
+     username:username
+   },
+   success:function(data){
+     if(data==1)
+     { 
+      $("#check").show();
+      $("#check").text("username already exist");
+    }
+    else{
+      $("#check").hide();
+      $.ajax({
+       url:"registerentry.php",
+       type: "POST",
+       data: {
+        username : username,
+        password : password,
+        gender :gender,
+        selectedval :selectedval
+      },
+      success :function(data){
+       $("#myModal").modal("hide");
+       readRecords();
+     }
+   });
+    }   
+  }
+
+});
+
+}
+function getmodaldetail(id)
+{
+  $("#check").hide();
+ $.ajax({
+   url: "fillvalue.php",
+   type: "POST",
+   data: {
+    id:id
+  },
+  success : function(data){
+    var user=JSON.parse(data);
+    
+    var store=user.username;
+
+    $("#registerusername").val(user.username);
+    $("#registerpassword").val(user.password);
+    $("#togetid").val(user.id);
+    $("#updatebutton").attr('data-bind',user.id);
+    if (user.gender == 'male')
+     { 
+       $('#tu').find(':radio[name=gender][value="male"]').prop('checked', true);
+     }else if(user.gender == 'female'){
+       $('#tu').find(':radio[name=gender][value="female"]').prop('checked', true);
+     }else if(user.gender == 'other'){
+       $('#tu').find(':radio[name=gender][value="other"]').prop('checked', true);
+     }
+
+    if(user.status=='active'){
+      $('#sel1 option[value=active]').prop('selected', true);
+    }else if(user.status=='deactive'){
+      $('#sel1 option[value=deactive]').prop('selected', true);
+    }
+}   
+}); 
+  
+ $("#updatebutton").show();
+ $("#registerbutton").hide();
+ $("#myModal").modal("show");
+
+
+}
+
+         /*    else
+             {
+                $("#check").show();
+                  $.ajax({
+          url:"updaterecord.php",
+          type:"POST",
+          data:{
+            id:id,
+            username: $("#registerusername").val(),
+            password: $("#registerpassword").val(),
+             gender :    $('input[name=gender]:checked').val(),
+           status :selectedval
+          },
+             success:function(data){
+              readRecords();
+             }        
+       });
+             }
+          }
+        });
+
+    }
+  }*/
+  function deleteuser(id)
+  {   
+    if (confirm('Are you sure you want to delete this?')) {
+     $.ajax({
+      url : "deleteuser.php",
+      type:"POST",
+      data:{
+       id:id
+     },
+     success:function(data){
+
+       readRecords();
+     }
+   });
+
+   }
+ }
+
+  $("#updatebutton").on('click',function(){
+
+      //$("#myModal").modal("hide");
+       var id=$("#togetid").val();
+       /*alert(id);
+       return false;*/
+      var combo=$('#sel1');     
+      var selectedval = $(combo, 'option:selected').val();
+      var username=$("#registerusername").val();
+      $.ajax({
+        url : "updatecheckrecords.php",
+        type:"POST",
+        data :{
+         username:username,
+         id:id
+       },
+       success :function(data){
+        if(data==1){
+
+          $("#check").show();
+          $("#check").text("username already exist");
+
+        }
+        else{
+              
+        $("#check").hide();
+         $.ajax({
+          url:"updaterecord.php",
+          type:"POST",
+          data:{
+            id:id,
+            username: $("#registerusername").val(),
+            password: $("#registerpassword").val(),
+            gender :    $('input[name=gender]:checked').val(),
+            status :selectedval
+          },
+          success:function(data){
+                //  alert(data);
+            $("#myModal").modal("hide");
+            readRecords()
+          }        
+        });
+       }
+     }
+   });
+    });
+  function deleteall()
+  {  
+     if (confirm('Are you sure you want to delete all records?')) {
+    $.ajax({
+      url:"deleteall.php",
+      success:function(data){
+        readRecords()
+      }
+    });
+  }
+  }
+  $('.checkrecords').change(function() {
+   
+    if( $(".checkrecords").is(':checked')){
+      $("#deleteselected").show();
+    }
+    
+    else{
+      $("#deleteselected").hide();
+    }
+ });
+     function deleteselected()
+     { 
+      if (confirm('Are you sure you want to delete all selected records?')) {
+var allvals = [];  
+        $(".checkrecords:checked").each(function() {  
+            allvals.push($(this).attr('data-id'));
+        });
+        if(allvals.length==0)
+        {
+            alert("no record selected");
+            readRecords();
+        }
+        else{
+         $.ajax({
+            url :"deleteselectedrecords.php",
+            type:"POST",
+            data:{
+              allvals: allvals
+            },
+            success:function(data)
+            {
+                  readRecords();
+            }
+          });
+         $("#deleteselected").hide();
+       }
+
+      
+     /*   var i=0;
+        while(i<allvals.length)
+        {  
+           var m=allvals[i];
+          $.ajax({
+            url :"deleteselectedrecords.php",
+            type:"POST",
+            data:{
+              id: m
+            }
+          });
+          i++;
+          }
+          readRecords();*/
+        }
+      }
+
+        //alert(allVals.length); return false;  
+       /* if(allvals.length <=0)  
+        {  
+            alert("Please select row.");  
+        }  
+        else { 
+          alert("worki");
+     }*/
+    /* var i=0;
+     for(i=0;i<allVals.lenght;i++)
+     {
+
+     }*/
+
+   
+
+
+
+   

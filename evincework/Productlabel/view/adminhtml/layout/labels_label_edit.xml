@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="jquery/colorpicker/css/colorpicker.css"/>  
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Evdpl\Productlabel\Block\Adminhtml\Label\Edit" name="Evdpl_Productlabel_label_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Evdpl\Productlabel\Block\Adminhtml\Label\Edit\Tabs" name="Evdpl_Productlabel_label_tabs">
+                <block class="Evdpl\Productlabel\Block\Adminhtml\Label\Edit\Tab\labelinfo" name="Evdpl_Productlabel_label_edit_tab_labelinfo"/>
+                <block class="Evdpl\Productlabel\Block\Adminhtml\Label\Edit\Tab\categorylabel" name="Evdpl_Productlabel_label_edit_tab_categorylabel"/>
+                <block class="Evdpl\Productlabel\Block\Adminhtml\Label\Edit\Tab\productlabel" name="Evdpl_Productlabel_label_edit_tab_productlabel"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">General</argument>
+                    <argument name="block" xsi:type="string">Evdpl_Productlabel_label_edit_tab_labelinfo</argument>
+                </action> 
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">CategoryLabel</argument>
+                    <argument name="block" xsi:type="string">Evdpl_Productlabel_label_edit_tab_categorylabel</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">ProductLabel</argument>
+                    <argument name="block" xsi:type="string">Evdpl_Productlabel_label_edit_tab_productlabel</argument>
+                </action>
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">attachment_products</argument>
+                    <argument name="block" xsi:type="array">
+                        <item name="label" xsi:type="string">Select Products</item>
+                        <item name="title" xsi:type="string">Select Products</item>
+                         <item name="url" xsi:type="helper" helper="Evdpl\Productlabel\Helper\Data::getProductsGridUrl"></item> 
+                        <item name="class" xsi:type="string">ajax</item>
+                    </argument>
+                </action>
+            </block>
+        </referenceContainer>
+         </body>
+</page>

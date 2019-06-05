@@ -1,0 +1,132 @@
+<?php
+$orderedData = $block->getOrderData();
+count($orderedData);
+?>
+<div style="clear: both"></div>
+<h2><?php /* @escapeNotVerified */ echo __('Product\'s Review') ?></h2>
+<h3><?php /* @escapeNotVerified */ echo __('Review for purchased products on order #'); ?><?= $block->getOrderId(); ?></h3>
+    <form class="mb_form contact"
+          action="<?php /* @escapeNotVerified */ echo $block->getFormAction(); ?>"
+          id="review-form"
+          method="post"
+          enctype="multipart/form-data"
+          data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>"
+          data-mage-init='{"validation":{}}'>
+              <?php
+              $i = 1;
+              foreach ($orderedData as $order) {
+                  //echo 'Hi'.$order->getProductId().'<br/>';
+                  $product = $this->getLoadProduct($order->getProductId());
+                  //print_r($product);
+
+                  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                  $product_id = $order->getProductId();
+                  $product_type = $product->getTypeId();
+//              echo $_configChild = $product->getTypeInstance()->getUsedProductIds(18);
+//              die();
+                  $childrens = array();
+                  $bun_childrens = array();
+                  $pro_par_id = "";
+                  if ($product_type == 'bundle') {
+                      $bun_childrens = $block->getChildrenIds($product_id);
+                      //print_r($bun_childrens);
+                  }
+                  if ($product_type == 'configurable') {
+                      $childrens = $block->getChildrens($product_id);
+                  }
+                  $pro_par_id = $block->getProductData($product_id);
+                  if ($pro_par_id == "") {
+                      if (!in_array($product_id, $childrens)) {
+                          ?>
+        <div class="order-review-content">
+            <div class="order-review-box">
+                    <span class="pro-review-title"><?php echo $product->getName(); ?></span>
+                    <img src="<?php echo $block->getProductThumbnail($product); ?>" alt="" />
+            </div>
+                    <fieldset class="fieldset">
+                        <div class="field id required">
+                            <div class="control">
+                                <input type="hidden" id="id"
+                                       name="id[<?php echo $product_id; ?>][]"
+                                       value="<?php echo $order->getProductId(); ?>" class="">
+                            </div>
+                        </div>
+                        <div class="field choice review-field-rating" id="rating_choice_<?php echo $i; ?>">
+                            <label class="label" id="Rating_rating_label"><span><?php echo 'Rating'; ?></span></label>
+                            <div class="control review-control-vote">
+            <?php for ($j = 1; $j <= 5; $j++): ?>
+                                    <input type="radio" id="Rating_<?php echo $j; ?>_<?php echo $product_id; ?>" class="radio" name="ratings[<?php echo $product_id; ?>][0]" value='<?php echo $j; ?>' data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}" />
+                                    <label class="rating-<?php echo $j; ?>" for="Rating_<?php echo $j; ?>_<?php echo $product_id; ?>" title="<?php echo $j; ?> star" id="Rating_<?php echo $j; ?>_label_<?php echo $product_id; ?>">
+                                        <span><?php echo $j; ?> star</span>
+                                    </label>
+            <?php endfor; ?>
+                            </div>
+                        </div>
+                        <div class="field summary required">
+                            <label for="summary_<?php echo $product_id; ?>" class="label">
+                                <span><?php /* @escapeNotVerified */ echo __('Summary of Review') ?></span>
+                            </label>
+                            <div class="control">
+                                <input type="text" id="summary_<?php echo $product_id; ?>"
+                                       name="summary[<?php echo $product_id; ?>][]"
+                                       class="required" data-validate="{required:true}">
+                            </div>
+                        </div>
+                        <div class="field review required">
+                            <label for="review_<?php echo $product_id; ?>" class="label">
+                                <span><?php /* @escapeNotVerified */ echo __('Review') ?></span>
+                            </label>
+                            <div class="control">
+                                <textarea id="review_<?php echo $product_id; ?>"
+                                          name="review[<?php echo $product_id; ?>][]"
+                                          class="required" data-validate="{required:true}"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+        </div>
+                    <?php
+                    $i++;
+                }
+            }
+        }
+        ?>
+        <div class="review-bottom">
+        <fieldset class="fieldset">
+            <div class="field nickname required">
+                <label for="nickname" class="label">
+                    <span><?php /* @escapeNotVerified */ echo __('Nick Name') ?></span>
+                </label>
+                <div class="control">
+                    <input type="text" id="nickname"
+                           name="nickname"
+                           class="required" data-validate="{required:true}">
+                </div>
+            </div>
+        </fieldset>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button type="submit" title="<?php /* @escapeNotVerified */ echo __('Submit Reviews') ?>" class="action submit primary">
+                    <span><?php /* @escapeNotVerified */ echo __('Submit Reviews') ?></span>
+                </button>
+            </div>
+        </div>
+            </div>
+    </form>
+<script type="text/javascript">
+    require([
+        'jquery',
+        'mage/mage'
+    ], function ($) {
+        var dataForm = $('#review-form');
+        dataForm.mage('validation', {
+            errorPlacement: function (error, element) {
+                if (element.hasClass('radio')) {
+                    error.appendTo(element.parents('.field.choice'));
+                }
+                if (element.hasClass('required')) {
+                    error.appendTo(element.parents('.field.required'));
+                }
+            }
+        });
+    });
+</script>

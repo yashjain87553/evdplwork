@@ -1,0 +1,72 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
+    //get current product
+    $prductID=$product->getId();
+   $stockItemRepository = $objectManager->create('Magento\CatalogInventory\Model\Stock\StockItemRepository');
+    $productstock=$stockItemRepository->get($prductID);
+   $stockstatus=$productstock->getIsInStock();   
+ $media_dir = $objectManager->get('Magento\Store\Model\StoreManagerInterface')
+          ->getStore()
+          ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+
+$_code='delivery_info';
+
+?>
+<style xml="space">
+.question-mark {
+    position: relative;
+    display: inline-block;
+    
+}
+
+.question-mark .tooltiptext {
+    visibility: hidden;
+    width: 240px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    
+    
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.question-mark:hover .tooltiptext {
+    visibility: visible;
+}
+</style>
+<?php if($stockstatus==1){?>
+<div class="product-additional-info"><?php echo $_attributeValue =$product->getResource()->getAttribute('additional_information')->getFrontend()->getValue($product);?></div>
+<?php  
+       $DeliveryCharge=$product->getDeliveryCharge();
+       $FreeDeliveryForOrderAbove=$product->getFreeDeliveryForOrderAbove();
+       $CodAvailableForOrderAbove=$product->getCodAvailableForOrderAbove();
+
+?>
+<?php
+/*$_delInfoValue =$product->getResource()->getAttribute($_code)->getFrontend()->getValue($product);*/
+if($DeliveryCharge!="" || $FreeDeliveryForOrderAbove!="" || $CodAvailableForOrderAbove!="" ):?>
+<div class="product-delivery-info"><h3><?php echo "Delivery Info"?><div class="question-mark"><span class="help_icon"><img src="<?php echo $media_dir.'wysiwyg/help-icon.png'; ?>"></span><h6 class="tooltiptext">Get all details about delivery below</h6></div></h3>
+<ul>
+<?php
+if($DeliveryCharge!="") {?>
+<li><?php echo "+ Rs. " .$DeliveryCharge. " Delivery Charge"."<br>";?></li>
+<?php }?>
+<?php 
+if($FreeDeliveryForOrderAbove!="") {
+?>
+<li><?php echo "Free delivery for order above Rs. ". $FreeDeliveryForOrderAbove."<br>"; ?></li> 
+<?php }?>
+<?php 
+if($CodAvailableForOrderAbove!="") {?>
+<li><?php echo "COD available for order above Rs. ". $CodAvailableForOrderAbove."<br>";  ?></li>   
+<?php } ?>
+</ul></div>
+<?php endif; ?>
+<?php }?>

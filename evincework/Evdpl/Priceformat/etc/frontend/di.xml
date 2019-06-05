@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Pricing\Render\Amount">
+        <plugin name="evdpl_priceformat_framework_pricing_render_amount" type="Evdpl\Priceformat\Plugin\Framework\Pricing\Render\Amount" />
+    </type>
+    <type name="Magento\Directory\Model\PriceCurrency">
+        <plugin name="evdpl_priceformat_directory_model_pricecurrency" type="Evdpl\Priceformat\Plugin\Directory\Model\PriceCurrency" />
+    </type>
+    <type name="Magento\Directory\Model\Currency">
+        <plugin name="evdpl_priceformat_directory_model_currency" type="Evdpl\Priceformat\Plugin\Directory\Model\Currency" />
+    </type>
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="evdpl_priceformat_sales_model_order" type="Evdpl\Priceformat\Plugin\Sales\Model\Order" />
+    </type>
+    <type name="Magento\Framework\Locale\Format">
+        <plugin name="evdpl_priceformat_framework_locale_format" type="Evdpl\Priceformat\Plugin\Framework\Locale\Format" />
+    </type>
+    <!--<type name="Magento\Catalog\Controller\Product\View">
+        <plugin name="sr_product_controller_view" type="Evdpl\Priceformat\Plugin\Catalog\Controller\Product\View" sortOrder="1"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Url">
+        <plugin name="My_Extension_Product_Redirect" type="Evdpl\Priceformat\Plugins\Url" />
+    </type>-->
+</config>

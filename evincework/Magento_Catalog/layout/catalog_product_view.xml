@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="2columns-right" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <move element="page.main.title" destination="product.info.main" before="-" />
+        <move element="product.info.price" destination="product.info.main" after="page.main.title" />
+        <move element="product.info.addto" destination="product.info.media" before="product.view.share" />
+        <move element="product.info.social" destination="product.info.media" after="product.info.addto" />
+        <referenceBlock name="category-sidebar" remove="true"/>
+        <referenceBlock name="product.info.sku" remove="true"/>
+        <referenceBlock name="product.info.mailto" remove="true" />
+        <referenceBlock name="catalog.compare.sidebar" remove="true"/>
+        <referenceContainer name="sidebar.additional" remove="true" />
+        <referenceContainer name="div.sidebar.additional">
+            <block class="Magento\Catalog\Block\Product\View" name="cart.buttons" template="product/view/buttons.phtml"/>
+            <!--<block class="Magento\Cms\Block\Block" name="secure-shopping-logos">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">secure-shopping-logos</argument>
+                </arguments>
+            </block>-->
+
+            <block class="Magento\Framework\View\Element\Template" after="mageArc.checkCodDelivery" name="deliveryinformation" template="Magento_Catalog::product/view/deliveryinfo.phtml" destination="div.sidebar.additional" />
+        </referenceContainer>
+        <refrenceContainer>
+            
+        </refrenceContainer>
+        <referenceContainer name="columns">
+            <container name="alsoviewed.combo" as="AlsoViewed" label="Also Viewed Combo Container" htmlTag="div" htmlClass="combo-viewed-main" before="product.info.details">
+                <block class="Vovayatsyuk\Alsoviewed\Block\ListProduct" name="also.viewed" template="Magento_Catalog::product/also_viewed.phtml"/>
+                
+            </container>
+        </referenceContainer>
+        
+        
+        <move element="mageArc.comboproduct" destination="alsoviewed.combo" before="also.viewed" />
+        <move element="mageArc.checkCodDelivery" destination="div.sidebar.additional" before="deliveryinformation" />
+
+       
+
+        <referenceContainer name="content.aside">
+            <block class="Magearc\Codrestrict\Block\Product\View\Comboproduct" after="catalog.product.related" name="mageArc.comboproduct" template="product/view/product_combo.phtml" />  
+        </referenceContainer>
+        <referenceContainer name="product.info.social">
+            <block class="Magento\Framework\View\Element\Template" name="whatsappshare" ifconfig="whatsapp/active_display/enabled" template="Evince_Whatsapp::whatsapp.phtml" >
+            </block>
+        </referenceContainer>
+        
+        <move element="product.info.details" destination="columns" after="+" />
+        <move element="catalog.product.related" destination="columns" after="+" />
+    </body>
+</page>

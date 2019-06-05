@@ -1,0 +1,160 @@
+<?php
+$_categories = $block->getCategoryCollection();
+$_categoryHelper = $this->getCategoryHelper();
+$total_cats = count($_categories);
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+?>
+<div class="trending-cat-main">
+    <div class="block-title-main">
+        <h2><?php echo __('Trending'); ?></h2>
+        <div class="title-border"></div>
+    </div>
+    <div class="trending-cat-title">
+        <ul class="nav nav-tabs">
+            <?php
+            $i = 0;
+            foreach ($_categories as $_category):
+                if (!$_category->getIsActive()) {
+                    continue;
+                }
+                ?>
+                <li class="<?php echo $i; ?>">
+                    <a data-toggle="tab" href="#trending-cat-tab-<?php echo $_category->getId(); ?>" >
+                        <?php echo $_category->getName(); ?>
+                    </a>
+                </li>
+                <?php
+                $i++;
+            endforeach;
+            ?>
+        </ul>
+    </div>
+    <div class="tab-content trending-cat-content">
+        <?php
+        $j = 0;
+
+        foreach ($_categories as $_category):
+            $cat_id = $_category->getId();
+            $product_collection = $block->getProductCollection($_category->getId());
+            count($product_collection);
+            $products = array();
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $imagewidth = 200;
+            $imageheight = 200;
+            $imageHelper = $objectManager->get('\Magento\Catalog\Helper\Image');
+
+
+            foreach ($product_collection as $product) {
+                $products[] = $product;
+            }
+            //echo var_dump($products);
+            $firsthalf = array_slice($products, 0, 2);
+            $secondhalf = array_slice($products, 2);
+            count($firsthalf);
+            count($secondhalf);
+
+            if (!$_category->getIsActive()) {
+                continue;
+            }
+            ?>
+            <div class="tab-pane fade trending-cat-tab" id="trending-cat-tab-<?php echo $cat_id; ?>">
+                <div class="trending-tab-content-left">
+                    <div class="trending-tab-content-left-top">
+                        <?php
+                        foreach ($firsthalf as $pro_1):
+                            $image_url = $imageHelper->init($pro_1, 'product_page_image_small')->setImageFile($product->getFile())->resize($imagewidth, $imageheight)->getUrl();
+                            ?>
+                        <?php $parentIds = $objectManager->get('Magento\ConfigurableProduct\Model\Product\Type\Configurable')->getParentIdsByChild($pro_1->getId());
+$parentId = array_shift($parentIds);
+if($parentId): 
+    $product = $objectManager->create('Magento\Catalog\Model\Product')->load($parentId); 
+$color_val = $pro_1->getData('color');
+endif;
+?>
+                            <?php // Product Image     ?>
+                            
+                            
+                            <div class="trend-cat-pro grid-item">
+                              <div class="inner-box">
+                                  <?php if($parentId): ?>
+                                  <a href="<?php /* @escapeNotVerified */ echo $product->getProductUrl().'?color='.$color_val; ?>" class="product photo product-item-photo" tabindex="-1"  target="_blank">
+                            <?php else: ?>
+                            <a href="<?php echo $pro_1->getProductUrl(); ?>" target="_blank">
+                                <?php endif; ?>
+                                
+                              
+                                    <div class="image-box">
+                                    	<img src="<?php echo $image_url ?>" alt="<?php echo $pro_1->getName(); ?>">
+                                    </div>
+                                    <h4><?php echo $pro_1->getName(); ?></h4>
+                                    
+                              
+                                </a>
+                                   </div>   
+                            </div>
+                        <?php endforeach;
+                        ?>
+                    </div>
+                    <div class="trending-tab-content-left-bottom">
+                        <?php
+                        foreach ($secondhalf as $pro_2):
+                            $image_url = $imageHelper->init($pro_2, 'product_page_image_small')->setImageFile($product->getFile())->resize($imagewidth, $imageheight)->getUrl();
+                            ?>
+                        <?php $parentIds2 = $objectManager->get('Magento\ConfigurableProduct\Model\Product\Type\Configurable')->getParentIdsByChild($pro_2->getId());
+$parentId2 = array_shift($parentIds2);
+if($parentId2): 
+    $product2 = $objectManager->create('Magento\Catalog\Model\Product')->load($parentId2); 
+$color_val_2 = $pro_2->getData('color');
+endif;
+?>
+                            <div class="trend-cat-pro grid-item">
+                             <div class="inner-box">
+                                <?php if($parentId2): ?>
+                                  <a href="<?php /* @escapeNotVerified */ echo $product2->getProductUrl().'?color='.$color_val_2; ?>" class="product photo product-item-photo" tabindex="-1"  target="_blank">
+                            <?php else: ?>
+                            <a href="<?php echo $pro_2->getProductUrl(); ?>" target="_blank">
+                                <?php endif; ?>
+                                 <div class="image-box">
+                                    <img src="<?php echo $image_url ?>" alt="<?php echo $pro_2->getName(); ?>">
+                                    
+                                   </div> 
+                                    <h4><?php echo $pro_2->getName(); ?></h4>
+                                </a>
+                                </div>
+                            </div>
+                        <?php endforeach;
+                        ?>
+                        <div class="trending-cat-left-left-ad">
+                            <?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('trending_category_left_ad_' . $cat_id)->toHtml(); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="trending-tab-content-right">
+                    <?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('trending_category_right_ad_' . $cat_id)->toHtml(); ?>
+                </div>
+            </div>
+            <?php
+            $j++;
+        endforeach;
+        ?>  
+    </div>
+</div>
+
+
+<script>
+  require([
+		'jquery',
+	], function ($) {
+		
+		$(document).ready(function() {
+			
+			$('.trending-cat-title li:first-child a').click();
+			
+				
+			
+            
+        });
+		
+});
+			
+</script>			

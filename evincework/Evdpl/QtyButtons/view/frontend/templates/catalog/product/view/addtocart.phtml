@@ -1,0 +1,135 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+?>
+<?php $_product = $block->getProduct(); ?>
+<?php $buttonTitle = __('Add to Cart'); ?>
+<?php if ($_product->isSaleable()): ?>
+    <div class="box-tocart">
+        <div class="fieldset">
+            <?php if ($block->shouldRenderQuantity()): ?>
+                <div class="field qty">
+                    <label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></label>
+
+                    <script type="text/x-magento-init">
+                        {
+                        "*": {
+                        "Magento_Ui/js/core/app": {
+                        "components": {
+                        "qty_change": {
+                        "component": "Evdpl_QtyButtons/js/view/product/view/qty_change",
+                        "defaultQty": <?php echo $block->getProductDefaultQty() * 1 ?>
+                        }
+                        }
+                        }
+                        }
+                        }
+                    </script>
+                    <div class="control" data-bind="scope: 'qty_change'"><button data-bind="click: decreaseQty">-</button>
+                       
+                         <input data-bind="value: qty()" type="number" name="qty" id="qty" maxlength="12"  title="<?php echo __('Qty') ?>" class="input-text qty" data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>" 
+                         disabled="disabled"/><button data-bind="click: increaseQty">+</button></div>
+                </div>
+            <?php endif; ?>
+            <div class="actions">
+                <button type="submit"
+                        title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>"
+                        class="action primary tocart"
+                        id="product-addtocart-button">
+                    <span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
+                </button>
+                <?php echo $block->getChildHtml('', true) ?>
+            </div>
+        </div>
+    </div>
+    <?php
+endif;
+?>
+
+<?php
+if ($_product->hasData('offer_text')) {
+
+$_getMyAttr = $_product->getResource()->getAttribute('offer_text');
+
+if (isset($_getMyAttr)) {
+    if ($_getMyAttr != '') {
+
+        $attrTestValue = $_getMyAttr->getFrontend()->getValue($_product);
+        $$attrTestValue = str_replace('</p>', '', $attrTestValue);
+        $array = explode('<p>', $attrTestValue);
+        ?>
+ <div class="offer_textDiv">       
+<h4>Offers</h4>
+        <div class = "offer_text">
+
+            <?php echo "&#8226;" . $array[1]; ?> 
+            <?php if (count($array) > 2) { ?>
+                
+                <div class = "offermorecontent" style="display:none;">
+                    <?php
+                    for ($i = 2; $i < count($array); $i++) {
+                        echo "&#8226;" . $array[$i] . "<br>";
+                    }
+                    ?>
+                </div>
+                <div id = "viewall"  style = "color: red;"><span>View All Offer</span></div>
+            <?php } ?>
+        </div>
+        </div>
+        <?php
+    }
+} }
+?>
+<script>
+    require([
+        'jquery'
+    ], function () {
+        jQuery(document).ready(function () {
+            jQuery("#viewall").click(function () {
+             jQuery(".offermorecontent").slideToggle(500, function(){
+                // check paragraph once toggle effect is completed
+                if(jQuery(".offermorecontent").is(':visible')){
+                   jQuery("#viewall").html("<span>View Less </span>");
+                } else{
+                    jQuery("#viewall").html("<span>View All</span>");
+                }  
+            });
+
+               /*$header = jQuery(this);
+                $content = $header.next();
+                $content.slideToggle(500, function () {
+                    $header.html(function () {
+                        return $content.is(":visible") ? "<span>View Less</span>" : "<span>View All Offer</span>";
+                    /*});
+               });*/
+
+            });
+            
+        });
+    });
+</script>
+<script type="text/x-magento-init">
+    {
+    "#product_addtocart_form": {
+    "Magento_Catalog/product/view/validation": {
+    "radioCheckboxClosest": ".nested"
+    }
+    }
+    }
+</script>
+<?php if (!$block->isRedirectToCartEnabled()) : ?>
+    <script type="text/x-magento-init">
+        {
+        "#product_addtocart_form": {
+        "catalogAddToCart": {
+        "bindSubmit": false
+        }
+        }
+        }
+    </script>
+<?php endif; ?>

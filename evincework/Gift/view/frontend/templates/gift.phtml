@@ -1,0 +1,187 @@
+<?php
+/*
+  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+  $objectManager->create('Magecomp\Extrafee\Helper\Data')->getConfig('Extrafee/Extrafee/Extrafee_amount');
+ */
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$cart = $objectManager->get('\Magento\Checkout\Model\Cart');
+
+// retrieve quote items collection
+$itemsCollection = $cart->getQuote()->getItemsCollection();
+$quoteid = $cart->getQuote()->getId();
+
+$session = $objectManager->get('Magento\Customer\Model\Session');
+
+    
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); 
+        $customerSession = $objectManager->get('Magento\Customer\Model\Session');
+        $ena_gift_wrap = $customerSession->getGiftEna();
+        if($ena_gift_wrap==1)
+        {
+            $customerSession->setAllCod(1);
+        }
+        else{
+            $customerSession->setAllCod(0);
+        }
+        
+        
+?><div class="cart table-wrapper">
+    <form class="form" id="custom-form" method="post" autocomplete="off">
+        <fieldset class="fieldset">
+            <legend class="legend"><span><?php echo __('Gift Wrap') ?></span><span class="gift_text">(COD not Available for Giftwrap)</span></legend><br>
+
+            <div class="control">
+<!--               <input type="checkbox" name="giftfee" onclick="return changeFee(this.checked);" <?php //if($session->getGiftKey()==1){    ?> checked="checked" <?php //}   ?> data-validate="{required:true}" id="giftfee" value="<?php //echo $this->getFee();   ?>">-->
+                <input type="checkbox" name="giftfee" <?php if ($session->getGiftKey() == 1) { ?> checked="checked" <?php } ?> data-validate="{required:true}" id="giftfee" value="<?php echo $this->getFee(); ?>"> 
+                <?php
+                $priceHelper = $objectManager->create('Magento\Framework\Pricing\Helper\Data'); // Instance of Pricing Helper
+                $price = $this->getFee(); //Your Price
+                echo $priceHelper->currency($price, true, false);
+                ?> 
+            </div>
+            <div class="field required">
+                <label for="gift-to" class="label"><span><?php echo __('To') ?></span></label>
+                <div class="control">                   
+                    <input id="gift-to" name="gift-to" class="input-text" value="<?php echo $this->getGiftRecipient(); ?>"type="text" data-validate="{required:true}" />
+                </div>
+            </div>
+            <div class="field required">
+                <label for="gift-from" name="gift-from" class="label"><span><?php echo __('From') ?></span></label>
+                <div class="control">
+                    <input id="gift-from" class="input-text" type="text" value="<?php echo $this->getGiftSender(); ?>" data-validate="{required:true}" />
+                </div>
+            </div>
+            <div class="field required">
+                <label for="giftmessage" class="label"><span><?php echo __('Gift Message') ?></span></label>
+                <div class="control">
+                    <textarea name="giftmessage" id="giftmessage" cols="50" class="input-text" data-validate="{required:true}"><?php echo $this->getGiftTxt(); ?></textarea>
+                </div>
+            </div>
+        </fieldset>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button type="button" class="action submit primary" id="Update" title="<?php echo __('Submit') ?>"><span><?php echo __('Update') ?></span></button>
+            </div>
+        </div>
+
+    </form>
+
+    <script type="text/javascript">
+        require(['jquery', 'Magento_Ui/js/modal/alert'], function ($, alert)
+        {
+            $("#Update").click(function ()
+            {
+                //alert("dddddddd");
+                if ($("#giftfee").prop('checked') == false)
+                {
+                    alert({
+                        title: 'Gift Message',
+                        content: 'You must have to check gift wrap fee option from checkbox.',
+                        actions: {
+                            always: function () {
+                                return false;
+                            }
+                        }
+                    });
+                    return false;
+                }
+                if ($("#gift-to").val() == '')
+                {
+                    alert({
+                        title: 'Gift To',
+                        content: 'Please enter To content.',
+                        actions: {
+                            always: function () {
+                                return false;
+                            }
+                        }
+                    });
+                    return false;
+                }
+                if ($("#gift-from").val() == '')
+                {
+                    alert({
+                        title: 'Gift From',
+                        content: 'Please enter From content.',
+                        actions: {
+                            always: function () {
+                                return false;
+                            }
+                        }
+                    });
+                    return false;
+                }
+                if ($("#giftmessage").val() == '')
+                {
+                    alert({
+                        title: 'Gift Message',
+                        content: 'Please enter Gift Message content.',
+                        actions: {
+                            always: function () {
+                                return false;
+                            }
+                        }
+                    });
+                    return false;
+                }
+                if ($("#giftmessage").val().length >= 500)
+                {
+                    alert({
+                        title: 'Gift Message',
+                        content: 'Gift message have maximum 500 characters length.',
+                        actions: {
+                            always: function () {
+                                return false;
+                            }
+                        }
+                    });
+                    return false;
+
+                }
+                if ($("#giftfee").prop('checked') == true)
+                {
+                    var checked_val = '1';
+                } else
+                {
+                    var checked_val = '0';
+                }
+                jQuery.ajax({
+                    url: "<?php echo $this->getUrl('gift/index/ajax'); ?>",
+                    showLoader: true,
+                    data: "giftwrap=" + checked_val + "&giftmessage=" + jQuery('#giftmessage').val() + "&gift_to=" + jQuery('#gift-to').val() + "&gift_from=" + jQuery('#gift-from').val() + "&quote_id=<?php echo $quoteid; ?>",
+                    type: 'POST'
+                }).done(function (data)
+                {
+                    location.reload();
+                });
+            });
+            $("#giftfee").click(function ()
+            {
+                if ($(this).prop('checked') == false)
+                {
+                    $("#giftmessage").val('');
+                    $("#gift-to").val('');
+                    $("#gift-from").val('');
+                    var checked_val = '0';
+                    jQuery.ajax({
+                        url: "<?php echo $this->getUrl('gift/index/ajax'); ?>",
+                        showLoader: true,
+                        data: "giftwrap=" + checked_val + "&giftmessage=''&gift_to=''&gift_from=''&quote_id=<?php echo $quoteid; ?>",
+                        type: 'POST'
+                    }).done(function (data)
+                    {
+
+                        location.reload();
+                    });
+                }
+            });
+        });
+    </script>
+    <script type="text/x-magento-init">
+        {
+        "#custom-form": {
+        "validation": {}
+        }
+        }
+    </script></div>

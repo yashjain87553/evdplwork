@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    layout="admin-1column"
+    xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd"
+>
+    <head>
+         <script src="Evince_Whatsapp::js/whatsapp-button.js" order="101" />
+    </head>
+    <body>
+  <referenceContainer name="alert.urls">
+  <block class="Magento\Framework\View\Element\Template" name="whatsappshare" ifconfig="whatsapp/active_display/enabled" template="Evince_Whatsapp::whatsapp.phtml" >
+  </block>
+ </referenceContainer>
+ <referenceContainer name="page.wrapper">
+    <block class="Magento\Framework\View\Element\Template" name="whatsapp" ifconfig="whatsapp/active_display/enabled" template="Evince_Whatsapp::whatsapp_footer.phtml" before="before.body.end" >
+  </block>
+</referenceContainer>
+   
+</body>
+</page>

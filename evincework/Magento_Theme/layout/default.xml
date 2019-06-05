@@ -1,0 +1,48 @@
+<?xml version="1.0"?><!--/** * Copyright © 2016 Magento. All rights reserved. * See COPYING.txt for license details. */--><page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">    
+    <update handle="default_head_blocks"/>    
+    <body>
+        <move element="navigation.sections" destination="header.container" />
+        <move element="minicart" destination="header-bottom-right" after="top.login" />
+        <move element="breadcrumbs" destination="main.content" before="columns" />
+        <move element="page.main.title" destination="main.content" after="breadcrumbs" />
+        <move element="customer.wishlist.item.remove" destination="customer.wishlist.item.cart" />
+        <referenceContainer name="header.container">            
+            <block class="Magento\Framework\View\Element\Template" name="header.top" as="topHeader" template="Magento_Theme::headercustom.phtml" before="main-headerwrap"/>            
+            <container name="main-headerwrap" label="Main Header" as="mainheader-wrapper" htmlTag="div" htmlClass="main-secation">                
+                <container name="header-wrapper" label="Page Header" as="header-wrapper" htmlTag="div" htmlClass="header content nav clearfix">                    
+                    <container name="header-container" label="Header" as="header-container" htmlTag="div" htmlClass="container">
+                        <container name="logo-container" label="Logo" as="logo-container" htmlTag="div" htmlClass="logo-container">
+                            <block class="Magento\Theme\Block\Html\Header\Logo" name="logo">                            
+                                <arguments>                                
+                                    <argument name="logo_img_width" xsi:type="number">232</argument>                                
+                                    <argument name="logo_img_height" xsi:type="number">67</argument>                            
+                                </arguments>                        
+                            </block>
+                        </container>
+                        <container name="header-bottom-right" label="Header Bottom" as="header-bottom-right" htmlTag="div" htmlClass="header-bottom-right">                
+                            <block class="Magento\Framework\View\Element\Template" name="top.login" as="topLogin" template="Magento_Theme::login-custom.phtml" />                        
+                            <block class="Magento\Framework\View\Element\Template" name="top.search" as="topSearch" template="Magento_Search::form.mini.phtml" />
+                        </container>
+                    </container>                
+                </container>            
+            </container>        
+        </referenceContainer>        
+        <referenceContainer name="footer-container">            
+            <container name="footer" as="footer" label="Page Footer" htmlTag="div" htmlClass="footer">                
+                <block class="Magento\Theme\Block\Html\Footer" name="footer-con" template="html/footer.phtml"/>            
+            </container>        
+        </referenceContainer>        
+        <referenceBlock name="advanced-search-link" remove="true"/>        
+        <referenceBlock name="report.bugs" remove="true"/>        
+        <referenceBlock name="copyright" remove="true"/>
+        <referenceBlock name="product.info.upsell" remove="true"/>       
+        <referenceBlock name="store_switcher" remove="true"/>        
+        <referenceBlock name="header.panel" remove="true"/>    
+        <!-- <referenceBlock name="authentication-popup" remove="true"/>      -->        
+        <referenceContainer name="content">            
+            <block class="Magento\Framework\View\Element\FormKey" name="formkey"/>        
+        </referenceContainer>                     
+        <!--<move element="checkout.cart.shipping" destination="checkout.cart.container" after="checkout.cart.form" />-->       
+        <move element="checkout.cart.coupon" destination="cart.summary" after="rewards.points" />     
+    </body>
+</page>

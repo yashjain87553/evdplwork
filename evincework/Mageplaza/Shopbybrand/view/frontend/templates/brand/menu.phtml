@@ -1,0 +1,213 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+<?php
+$helper = $this->helper('Mageplaza\Shopbybrand\Helper\Data');
+$timeId = time();
+$topBrands = $block->getTopBrands();
+$MostViewed = $block->getMostViewedBrands();
+$Exclusive = $block->getExclusiveBrands();
+$Featured = $block->getFeaturedBrands();
+$NewLaunches = $block->getNewBrands();
+$SearchBrands = $block->getSearchBrands();
+$style = $helper->getShopByBrandConfig('brandpage/feature/style');
+?>
+<div class="menu-brands-main dfdfsdfsd">
+    <div class="row">
+        <div class="col-md-8 col-sm-8 col-xs-12">
+            <!-- Nav pills -->
+            <ul class="nav nav-pills">
+                <li class="active"><a href="#tab-most-viewed" data-toggle="tab">Most Viewed</a></li>
+                <li><a href="#tab-exclusive" data-toggle="tab">Exclusive</a></li>
+                <li><a href="#tab-featured" data-toggle="tab">Featured</a></li>
+                <li><a href="#tab-new-launches" data-toggle="tab">New Launches</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content well">
+                <div class="tab-pane active" id="tab-most-viewed">
+                    <ul>
+                        <?php foreach ($MostViewed as $brand):
+                            ?>
+                            <li>
+                                <a href="<?php echo $block->helper()->getBrandUrl($brand) ?>" target="_blank" alt="<?php echo $brand->getValue() ?>">
+                                    <img class="brand-img" src="<?php echo $block->helper()->getBrandImageUrl($brand) ?>">
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <div class="tab-pane" id="tab-exclusive">
+                    <ul>
+                        <?php foreach ($Exclusive as $brand):
+                            ?>
+                            <li>
+                                <a href="<?php echo $block->helper()->getBrandUrl($brand) ?>" target="_blank">
+                                    <img class="brand-img" src="<?php echo $block->helper()->getBrandImageUrl($brand) ?>">
+                                    <?php if ($block->showLabel()): ?>
+                                        <span>
+                                            <?php echo $brand->getValue() ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <div class="tab-pane" id="tab-featured">
+                    <ul>
+                        <?php foreach ($Featured as $brand):
+                            ?>
+                            <li>
+                                <a href="<?php echo $block->helper()->getBrandUrl($brand) ?>" target="_blank">
+                                    <img class="brand-img" src="<?php echo $block->helper()->getBrandImageUrl($brand) ?>">
+                                    <?php if ($block->showLabel()): ?>
+                                        <span>
+                                            <?php echo $brand->getValue() ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <div class="tab-pane" id="tab-new-launches">
+                    <ul>
+                        <?php foreach ($NewLaunches as $brand):
+                            ?>
+                            <li>
+                                <a href="<?php echo $block->helper()->getBrandUrl($brand) ?>" target="_blank">
+                                    <img class="brand-img" src="<?php echo $block->helper()->getBrandImageUrl($brand) ?>">
+                                    <?php if ($block->showLabel()): ?>
+                                        <span>
+                                            <?php echo $brand->getValue() ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="search-brands-main">
+                <div class="see_all_brands"><a href="<?php echo $this->getUrl('brand'); ?>">View All Brands &gt;</a></div>
+                <form id="name_search" method="post" />
+                <input type="text" id="s" />
+                </form>
+                <div class="main-brand-results">
+                    <?php //if (count($TopBrands > 0)):   ?>
+                    <div class="menu-top-brands" id="menu-top-brands">
+                        <strong>Top Brands</strong>
+                        <ul>
+                            <?php foreach ($topBrands as $brand):
+                                ?>
+                                <li>
+                                    <a href="<?php echo $block->helper()->getBrandUrl($brand) ?>" target="_blank">
+                                        <?php echo $brand->getValue() ?>
+                                    </a>
+                                    <?php
+                                    $brand_types = explode(',', $brand->getBrandType());
+                                    foreach ($brand_types as $type):
+                                        if ($type == 'Exclusive' || $type == 'New'):
+                                            ?>
+                                            <span class="brand-label <?php
+                                            if ($type == 'New') {
+                                                echo 'brand-new';
+                                            }
+                                            ?>"><?php echo $type; ?></span>
+                                                  <?php
+                                              endif;
+                                          endforeach;
+                                          ?>
+                                </li>
+                            <?php endforeach; ?> 
+                        </ul>
+                    </div>
+                    <?php foreach (range('0', '9') as $char) : ?>
+                        <?php if (isset($SearchBrands[$char])): ?>
+                            <div class="brand-char-<?php echo $char; ?>" id="brand-char-<?php echo $char; ?>">
+                                <div class="brand-title"><strong> # <?php echo $char; ?></strong></div>
+                                <ul class="brandList">
+                                    <?php foreach ($SearchBrands[$char] as $brand): ?>
+                                        <li>
+                                            <a href="<?php echo $block->helper()->getBrandUrl($brand) ?>" target="_blank">
+                                                <?php echo $brand->getValue() ?>
+                                            </a>
+                                            <?php
+                                            $brand_types = explode(',', $brand->getBrandType());
+                                            foreach ($brand_types as $type):
+                                                if ($type == 'Exclusive' || $type == 'New'):
+                                                    ?>
+                                                    <span class="brand-label <?php
+                                                    if ($type == 'New') {
+                                                        echo 'brand-new';
+                                                    }
+                                                    ?>"><?php echo $type; ?></span>
+                                                          <?php
+                                                      endif;
+                                                  endforeach;
+                                                  ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                    <?php foreach (range('A', 'Z') as $char) : ?>
+                        <?php if (isset($SearchBrands[$char])): ?>
+                            <div class="brand-char-<?php echo $char; ?>" id="brand-char-<?php echo $char; ?>">
+                                <div class="brand-title"><strong> # <?php echo $char; ?></strong></div>
+                                <ul class="brandList">
+                                    <?php foreach ($SearchBrands[$char] as $brand): ?>
+                                        <li>
+                                            <a href="<?php echo $block->helper()->getBrandUrl($brand) ?>" target="_blank">
+                                                <?php echo $brand->getValue() ?>
+                                            </a>
+                                            <?php
+                                            $brand_types = explode(',', $brand->getBrandType());
+                                            foreach ($brand_types as $type):
+                                                if ($type == 'Exclusive' || $type == 'New'):
+                                                    ?>
+                                                    <span class="brand-label <?php
+                                                    if ($type == 'New') {
+                                                        echo 'brand-new';
+                                                    }
+                                                    ?>"><?php echo $type; ?></span>
+                                                          <?php
+                                                      endif;
+                                                  endforeach;
+                                                  ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                    <span class='no-brands'>No brands found!</span>
+                </div>
+                <div class="main-search-results">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

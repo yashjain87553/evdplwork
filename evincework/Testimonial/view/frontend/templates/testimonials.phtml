@@ -1,0 +1,28 @@
+<?php
+$_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $_objectManager->get('Magento\Store\Model\StoreManagerInterface'); 
+$currentStore = $storeManager->getStore();
+$mediaUrl = $currentStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+
+    $items=$block->testimoniescollection();
+    
+    foreach($items as $item)
+    {   
+    	if($item->getStatus()!=0)
+    	{
+    ?>  <div class="testimonials">
+        <span class="testimonialimage">
+    	<img src="<?php echo $mediaUrl.'testimonial/image'. $item->getAuthorImage(); ?>">
+    	</span>
+    	<span class="message"><?php echo $item->getMessage(); ?></span>
+    	<span class="testimonialdate"><?php echo $item->getTestimonialDate(); ?></span>
+    	<span class="testimonialauthorname"><?php echo $item->getAuthorName(); ?></span>
+    	<span class="testimonialrating"><?php echo $item->getRating(); ?></span>
+    	<span class="tesimonialsortorder" style="display:none"><?php echo $item->getRating(); ?></span>
+
+    	<hr></hr>
+    	</div>
+	<?php
+	    }
+	}
+	?>

@@ -1,0 +1,88 @@
+<?php
+/*
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+ $objectManager->create('Magecomp\Extrafee\Helper\Data')->getConfig('Extrafee/Extrafee/Extrafee_amount');
+*/
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+ $cart = $objectManager->get('\Magento\Checkout\Model\Cart'); 
+
+// retrieve quote items collection
+$itemsCollection = $cart->getQuote()->getItemsCollection();
+$quoteid=$cart->getQuote()->getId();
+
+$session = $objectManager->get('Magento\Customer\Model\Session');
+?><div class="cart table-wrapper">
+<form class="form" id="custom-form" method="post" autocomplete="off">
+
+
+
+	<fieldset class="fieldset">
+       <legend class="legend"><span><?php echo __('Gift Wrap') ?></span></legend><br>
+	      
+            <div class="control">
+               <input type="checkbox" name="giftfee"  <?php if($session->getGiftKey()==1){ ?> checked="checked" <?php }?> data-validate="{required:true}" id="giftfee" value="<?php echo $this->getFee();?>">
+               <?php 
+
+    $priceHelper = $objectManager->create('Magento\Framework\Pricing\Helper\Data'); // Instance of Pricing Helper
+    $price = $this->getFee(); //Your Price
+    echo $priceHelper->currency($price, true, false);
+               ?> 
+            </div>
+       
+        <div class="field required">
+            <label for="giftmessage" class="label"><span><?php echo __('Gift Message') ?></span></label>
+            <div class="control">
+                <textarea name="giftmessage" id="giftmessage" cols="50" class="input-text" data-validate="{required:true}"><?php echo $this->getGiftTxt();?></textarea>
+            </div>
+        </div>
+   </fieldset>
+<div class="actions-toolbar">
+        <div class="primary">
+            <button type="button" class="action submit primary" id="Update" title="<?php  echo __('Submit') ?>"><span><?php echo __('Update') ?></span></button>
+        </div>
+    </div>
+
+</form>
+
+<script type="text/javascript">
+require(['jquery'], function($)
+{ 
+	$( "#Update" ).click(function() 
+	{
+		//alert("dddddddd");
+		/*if($("#giftfee").prop('checked')==false)
+		{
+			return false;
+		}*/
+		if($("#giftmessage").val()=='')
+		{
+			return false;
+		}
+		if($("#giftfee").prop('checked')==true)
+		{
+			var checked_val='1';
+		}
+		else
+		{
+			var checked_val='0';
+		}
+		jQuery.ajax({
+						url: "<?php echo $this->getUrl('gift/index/ajax'); ?>",
+						showLoader: true,
+						data: "giftwrap="+checked_val+"&giftmessage="+jQuery('#giftmessage').val()+"&quote_id=<?php echo $quoteid;?>",                
+						type: 'POST'
+				}).done(function(data) 
+				{
+					 location.reload();
+				});
+	});
+});
+</script>
+<script type="text/x-magento-init">
+    {
+        "#custom-form": {
+            "validation": {}
+        }
+    }
+</script></div>

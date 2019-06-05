@@ -1,0 +1,8 @@
+<!-- ko if: isDisplayedCustomtax() -->
+<tr class="totals customtax excl">
+   <th class="mark" colspan="1" scope="row" data-bind="text: custom_tax"></th>
+   <td class="amount">
+       <span class="price" data-bind="text: getCustomTax(), attr: {'data-th': custom_tax}"></span>
+   </td>
+</tr>
+<!-- /ko -->

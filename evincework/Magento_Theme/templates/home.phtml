@@ -1,0 +1,13 @@
+<?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('home_page_banner')->toHtml();?>
+<?php //echo $block->getLayout()->createBlock('Magehit\Bestsellerproducts\Block\Home\DealsProductsList')->setTemplate('dailydealsblock.phtml')->toHtml();?>
+<?php echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('home_daily_deal_banner')->toHtml();?>
+<div class="home-middle-banners">
+    <div class="row">
+        <?php echo $block->getLayout()->createBlock('Mageplaza\BetterSlider\Block\Banner')->setTemplate('HomeBanner.phtml')->toHtml();?>
+    </div>
+</div>
+<?php echo $block->getLayout()->createBlock('Magehit\Bestsellerproducts\Block\Home\BestsellerList')->setTemplate('bestsellerblock.phtml')->toHtml();?>
+<?php echo $block->getLayout()->createBlock('Mageplaza\Shopbybrand\Block\Brand\TopHome')->setTemplate('brand/tophome.phtml')->toHtml();?>
+<?php echo $block->getLayout()->createBlock('Magehit\Bestsellerproducts\Block\Home\FeaturedProductsList')->setTemplate('featuredblock.phtml')->toHtml();?>
+<?php echo $block->getLayout()->createBlock('Evdpl\HomeTrending\Block\TrendingCategories')->setTemplate('trending.phtml')->toHtml();?>
+<?php //echo $block->getLayout()->createBlock('Emizentech\ShopByBrand\Block\Footer')->setTemplate('emizen_brand/footer.phtml')->toHtml(); ?>

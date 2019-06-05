@@ -1,0 +1,61 @@
+<?php
+$_helper = $this->helper('Evince\Whatsapp\Helper\Data');
+$buttonSize = $_helper->getButtonSize();
+$buttonPos = $_helper->getButtonPos();
+$customsharemsg = $_helper->getCustomShareMessage();
+$block->getProduct();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$product = $objectManager->get('Magento\Framework\Registry')->registry('current_product'); //get current category
+$productName = $product->getName();
+if (strlen($customsharemsg) > 0) {
+    $msg = $customsharemsg;
+} else {
+    $msg = "Hey! Take a look at this awesome product:";
+}
+$prd = $productName;
+$display_des = $msg . ' ' . $prd;
+?>
+<div class="social-share-main">
+    <div class="social-share-icon" id="share">Share</div>
+    <div class="wdm-social-icons" data-role="wdm-social-icons">
+        <!-- FACEBOOK -->
+        <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($product->getProductUrl()); ?>&t=<?php echo urlencode($product->getName()) ?>" onclick='javascript:window.open(this.href, "", "width=640,height=480,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes");return false' title="Share on FaceBook">
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+        </a>
+
+        <!-- TWITTER -->
+        <a href="http://twitter.com/home/?status=<?php echo urlencode($product->getProductUrl()); ?>(<?php echo urlencode($product->getName()) ?>)" onclick='javascript:window.open(this.href, "", "width=640,height=480,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes");return false' title="Share on Twitter">
+            <i class="fa fa-twitter" aria-hidden="true"></i>
+        </a>
+
+        <!-- Google Plus -->
+        <a href="https://plus.google.com/share?url=<?php echo urlencode($product->getProductUrl()); ?>(<?php echo urlencode($product->getName()) ?>)" onclick='javascript:window.open(this.href, "", "width=640,height=480,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes");return false' title="Share on Google Plus">
+            <i class="fa fa-google-plus" aria-hidden="true"></i>
+        </a>
+
+        <!-- Mail To -->
+        <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site <?php echo urlencode($product->getProductUrl()); ?>(<?php echo urlencode($product->getName()) ?>)"
+           title="Share by Email">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+
+        </a>
+        <?php
+        if ($buttonPos == 1 || $buttonPos == 3) {
+            ?>
+            <a href="whatsapp://send" data-text='<?php echo $display_des; ?>'
+               data-href="" class="wa_btn wa_btn_<?php echo $buttonSize ?>" style="display:none;">Whatsapp</a>
+<?php } ?>
+    </div>
+</div>
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+        $(document).ready(
+                function () {
+                    $("#share").click(function () {
+                        $(".wdm-social-icons").slideToggle('slow');
+                    });
+                });
+    });
+</script>

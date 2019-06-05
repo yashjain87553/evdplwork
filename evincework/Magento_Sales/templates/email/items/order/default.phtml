@@ -1,0 +1,81 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Sales\Block\Order\Email\Items\DefaultItems */
+
+/** @var $_item \Magento\Sales\Model\Order\Item */
+$_item = $block->getItem();
+$_order = $_item->getOrder();
+$_store = $_order->getStore();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+?>
+<tr>
+
+              <td class="product-informations" width="18%" style="border-right:0;">
+<?php
+            $_product = $objectManager->get('Magento\Catalog\Model\Product')->load($_item->getProductId());
+
+$imageHelper  = $objectManager->get('\Magento\Catalog\Helper\Image');
+
+$image_url = $imageHelper->init($_product, 'product_page_image_small')->setImageFile($_product->getFile())->resize(100, 100)->getUrl();
+        ?>
+        <img src="<?php echo $image_url; ?>">
+              </td>
+            <td style="border-left:0;" align="left">              
+                <h2 style="text-align: left; margin: 0 0 10px;  padding: 0 0 0 10px; font-size: 16px;">
+                <?= $block->escapeHtml($_item->getName()) ?>
+                </h2>  
+     <table class="item-options" style="text-align: left;" cellspacing="0" cellpadding="0" align="left">
+                  <tr>                      
+                    <td colspan="2"></td>
+                  </tr>
+                  <tr>
+        <td><?= /* @escapeNotVerified */  __('SKU'); ?>: </td><td><?= $block->escapeHtml($block->getSku($_item)) ?></td>
+                   </tr> 
+       
+        <?php if ($block->getItemOptions()): ?>
+          
+            <?php foreach ($block->getItemOptions() as $option): ?>
+            	<tr>
+                    <td>
+                <?php echo /* @escapeNotVerified */  $option['label'] ?> 
+                  </td>
+                
+                    <td><?= /* @escapeNotVerified */  nl2br($option['value']) ?></td>
+                 </tr>   
+                
+            <?php endforeach; ?>
+           
+        <?php endif; ?>
+        </table>
+        <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
+        <?php if ($addInfoBlock) :?>
+            <?= $addInfoBlock->setItem($_item)->toHtml() ?>
+        <?php endif; ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
+    </td>
+    <td><strong><?= /* @escapeNotVerified */  $_item->getQtyOrdered() * 1 ?></strong></td>
+    <td><strong>
+        <?php echo /* @escapeNotVerified */  $block->getItemPrice($_item); ?></strong>
+    </td>
+</tr>
+<?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
+<tr>
+    <td colspan="3" class="item-extra">
+        <table class="message-gift">
+            <tr>
+                <td>
+                    <h3><?= /* @escapeNotVerified */  __('Gift Message') ?></h3>
+                    
+                    <br /><?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<?php endif; ?>

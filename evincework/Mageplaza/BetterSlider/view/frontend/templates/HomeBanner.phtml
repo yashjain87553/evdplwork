@@ -1,0 +1,34 @@
+<?php
+$objectManagerCms = \Magento\Framework\App\ObjectManager::getInstance();
+$cmsPage = $objectManagerCms->get('\Magento\Cms\Model\Page');
+$pages = $block->getBanner($cmsPage->getId());
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$mediaPath = $objectManager->get('Magento\Store\Model\StoreManagerInterface')
+        ->getStore()
+        ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+
+if ($pages != "") {
+    foreach ($pages as $key => $value) {
+        ?>  
+        <div class="page-banner"> 
+            <?php
+            if (!empty($value)) {
+                if (($value['file']) != "") {
+                    if ($value['url']) {
+                        ?>       
+                        <a href="<?php echo $value['url']; ?>">
+                            <img src="<?php echo $mediaPath . 'mageplaza/betterslider/banner/image' . $value['file']; ?>" alt="<?php echo $value['name']; ?>" /></a>
+                        <?php
+                    } else {
+                        ?>
+                        <img src="<?php echo $mediaPath . 'mageplaza/betterslider/banner/image' . $value['file']; ?>" alt="<?php echo $value['name']; ?>"/>
+                        <?php
+                    }
+                }
+            }
+            ?>
+        </div>
+        <?php
+    }
+}
+?>
